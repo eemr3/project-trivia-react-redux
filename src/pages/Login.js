@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
-// import { connect } from 'react-redux';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 // import { emailValue } from '../actions/index';
+import { thunkQuiz, thunkToken } from '../redux/actions';
 
-export default class Login extends Component {
+class Login extends Component {
   constructor() {
     super();
     this.state = {
@@ -14,6 +15,7 @@ export default class Login extends Component {
 
     this.enableDisableBtn = this.enableDisableBtn.bind(this);
     this.onInputChange = this.onInputChange.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   onInputChange({ target: { value, name } }) {
@@ -30,6 +32,13 @@ export default class Login extends Component {
     }
   }
 
+  handleClick() {
+    const { setQuiz, setToken, tokenState } = this.props;
+    console.log(tokenState);
+    setToken();
+    setQuiz(tokenState);
+  }
+
   render() {
     const {
       state: {
@@ -39,7 +48,6 @@ export default class Login extends Component {
       },
       onInputChange,
     } = this;
-    // const { dispatchSetValue } = this.props;
     return (
       <div>
         <form>
@@ -69,7 +77,7 @@ export default class Login extends Component {
             type="button"
             data-testid="btn-play"
             disabled={ buttonDisabled }
-            onClick={ () => {} }
+            onClick={ this.handleClick }
           >
             Play
           </button>
@@ -78,3 +86,24 @@ export default class Login extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  tokenState: state.tokenReducer.token,
+});
+const mapDispatchToProps = (dispatch) => ({
+  setQuiz: (token) => dispatch(thunkQuiz(token)),
+  setToken: () => dispatch(thunkToken()),
+});
+
+Login.propTypes = {
+  tokenState: PropTypes.string,
+  setQuiz: PropTypes.func,
+  setToken: PropTypes.func,
+};
+
+Login.defaultProps = {
+  tokenState: '',
+  setQuiz: () => {},
+  setToken: () => {},
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
