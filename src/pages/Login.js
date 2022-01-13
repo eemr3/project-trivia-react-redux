@@ -33,10 +33,11 @@ class Login extends Component {
   }
 
   handleClick() {
-    const { setQuiz, setToken, tokenState } = this.props;
+    const { setQuiz, setToken, tokenState, history } = this.props;
     console.log(tokenState);
     setToken();
     setQuiz(tokenState);
+    history.push('/game');
   }
 
   render() {
@@ -99,6 +100,9 @@ Login.propTypes = {
   tokenState: PropTypes.string,
   setQuiz: PropTypes.func,
   setToken: PropTypes.func,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
 };
 
 Login.defaultProps = {
