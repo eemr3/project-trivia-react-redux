@@ -7,15 +7,11 @@ import NotFound from '../pages/NotFound';
 export default class Routes extends Component {
   render() {
     return (
-      <div>
-        <main>
-          <Switch>
-            <Route exact path="/" component={ Login } />
-            <Route path="/game" component={ Game } />
-            <Route exact path="*" component={ NotFound } />
-          </Switch>
-        </main>
-      </div>
+      <Switch>
+        <Route exact path="/" component={ Login } />
+        <Route path="/game" component={ Game } />
+        <Route exact path="*" component={ NotFound } />
+      </Switch>
     );
   }
 }
