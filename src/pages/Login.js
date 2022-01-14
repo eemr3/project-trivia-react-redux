@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 // import { emailValue } from '../actions/index';
-import { thunkQuiz, thunkToken } from '../redux/actions';
+import { thunkQuiz, thunkToken, emailUser } from '../redux/actions';
 
 import './Login.css';
 
@@ -36,10 +36,18 @@ class Login extends Component {
   }
 
   handleClick() {
-    const { setQuiz, setToken, tokenState, history } = this.props;
+    const { setQuiz, setToken, tokenState, history, setEmail } = this.props;
+    const {
+      state: {
+        name,
+        gravatarEmail,
+      },
+    } = this;
     console.log(tokenState);
     setToken();
     setQuiz(tokenState);
+    console.log(name, gravatarEmail);
+    setEmail({ name, gravatarEmail });
     history.push('/game');
   }
 
@@ -99,12 +107,14 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   setQuiz: (token) => dispatch(thunkQuiz(token)),
   setToken: () => dispatch(thunkToken()),
+  setEmail: ({ name, gravatarEmail }) => dispatch(emailUser({ name, gravatarEmail })),
 });
 
 Login.propTypes = {
   tokenState: PropTypes.string,
   setQuiz: PropTypes.func,
   setToken: PropTypes.func,
+  setEmail: PropTypes.func,
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
@@ -114,5 +124,6 @@ Login.defaultProps = {
   tokenState: '',
   setQuiz: () => {},
   setToken: () => {},
+  setEmail: () => {},
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

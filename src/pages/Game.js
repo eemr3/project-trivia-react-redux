@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
+import Header from '../components/Header';
 // import PropTypes from 'prop-types';
 
 class Game extends Component {
   render() {
     return (
-      <div>Oi</div>
+      <>
+        <Header />
+        <h1>Oi</h1>
+      </>
     );
   }
 }

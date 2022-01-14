@@ -2,6 +2,7 @@ import { requestQuiz, requestToken } from '../../data/dataApi';
 
 export const ACTION_TOKEN = 'ACTION_TOKEN';
 export const ACTION_QUIZ = 'ACTION_QUIZ';
+export const EMAIL_USER = 'EMAIL_USER';
 
 const actionToken = (token) => ({
   type: ACTION_TOKEN,
@@ -11,6 +12,12 @@ const actionToken = (token) => ({
 const actionQuiz = (quiz) => (
   {
     type: ACTION_QUIZ, quiz,
+  }
+);
+
+export const emailUser = (dataUser) => (
+  {
+    type: EMAIL_USER, dataUser,
   }
 );
 
