@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
-// import { connect } from 'react-redux';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 // import { emailValue } from '../actions/index';
+import { thunkQuiz, thunkToken } from '../redux/actions';
 
-export default class Login extends Component {
+import './Login.css';
+
+class Login extends Component {
   constructor() {
     super();
     this.state = {
@@ -14,6 +17,7 @@ export default class Login extends Component {
 
     this.enableDisableBtn = this.enableDisableBtn.bind(this);
     this.onInputChange = this.onInputChange.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   onInputChange({ target: { value, name } }) {
@@ -30,6 +34,14 @@ export default class Login extends Component {
     }
   }
 
+  handleClick() {
+    const { setQuiz, setToken, tokenState, history } = this.props;
+    console.log(tokenState);
+    setToken();
+    setQuiz(tokenState);
+    history.push('/game');
+  }
+
   render() {
     const {
       state: {
@@ -39,12 +51,11 @@ export default class Login extends Component {
       },
       onInputChange,
     } = this;
-    // const { dispatchSetValue } = this.props;
     return (
-      <div>
+      <main className="form-signin">
         <form>
           <label htmlFor="name">
-            Nome:
+            Nome ou Nick
             <input
               data-testid="input-player-name"
               id="name"
@@ -55,7 +66,7 @@ export default class Login extends Component {
             />
           </label>
           <label htmlFor="gravatarEmail">
-            Email:
+            Email Gravatar
             <input
               data-testid="input-gravatar-email"
               id="gravatarEmail"
@@ -69,12 +80,37 @@ export default class Login extends Component {
             type="button"
             data-testid="btn-play"
             disabled={ buttonDisabled }
-            onClick={ () => {} }
+            onClick={ this.handleClick }
           >
             Play
           </button>
         </form>
-      </div>
+      </main>
+
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  tokenState: state.token,
+});
+const mapDispatchToProps = (dispatch) => ({
+  setQuiz: (token) => dispatch(thunkQuiz(token)),
+  setToken: () => dispatch(thunkToken()),
+});
+
+Login.propTypes = {
+  tokenState: PropTypes.string,
+  setQuiz: PropTypes.func,
+  setToken: PropTypes.func,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
+};
+
+Login.defaultProps = {
+  tokenState: '',
+  setQuiz: () => {},
+  setToken: () => {},
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
