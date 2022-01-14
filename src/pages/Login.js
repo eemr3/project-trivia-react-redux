@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 // import { emailValue } from '../actions/index';
 import { thunkQuiz, thunkToken } from '../redux/actions';
 
+import './Login.css';
+
 class Login extends Component {
   constructor() {
     super();
@@ -50,10 +52,10 @@ class Login extends Component {
       onInputChange,
     } = this;
     return (
-      <div>
+      <main className="form-signin">
         <form>
           <label htmlFor="name">
-            Nome:
+            Nome ou Nick
             <input
               data-testid="input-player-name"
               id="name"
@@ -64,7 +66,7 @@ class Login extends Component {
             />
           </label>
           <label htmlFor="gravatarEmail">
-            Email:
+            Email Gravatar
             <input
               data-testid="input-gravatar-email"
               id="gravatarEmail"
@@ -83,7 +85,8 @@ class Login extends Component {
             Play
           </button>
         </form>
-      </div>
+      </main>
+
     );
   }
 }
