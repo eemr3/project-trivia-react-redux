@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 // import { emailValue } from '../actions/index';
 import { thunkQuiz, thunkToken } from '../redux/actions';
@@ -84,6 +85,7 @@ class Login extends Component {
           >
             Play
           </button>
+          <Link to="/configuracao" data-testid="btn-settings">Configuração</Link>
         </form>
       </main>
 
