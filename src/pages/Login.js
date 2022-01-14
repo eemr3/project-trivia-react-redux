@@ -89,7 +89,7 @@ class Login extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  tokenState: state.tokenReducer.token,
+  tokenState: state.token,
 });
 const mapDispatchToProps = (dispatch) => ({
   setQuiz: (token) => dispatch(thunkQuiz(token)),
