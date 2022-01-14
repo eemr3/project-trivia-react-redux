@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import hashEmail from '../service/hashEmail';
 
 class Header extends Component {
@@ -11,7 +12,6 @@ class Header extends Component {
 
   hashUserEmail() {
     const { email } = this.props;
-    console.log(hashEmail(email));
     return hashEmail(email);
   }
 
@@ -20,7 +20,11 @@ class Header extends Component {
     const email = this.hashUserEmail();
     return (
       <header>
-        <img data-testid="header-profile-picture" alt="userImagem" src={ `https://www.gravatar.com/avatar/${email}` } />
+        <img
+          data-testid="header-profile-picture"
+          alt="userImagem"
+          src={ `https://www.gravatar.com/avatar/${email}` }
+        />
         <p data-testid="header-player-name">{name}</p>
         <p data-testid="header-score">0</p>
       </header>
@@ -33,4 +37,13 @@ const mapStateToProps = (state) => ({
   email: state.player.gravatarEmail,
 });
 
+Header.propTypes = {
+  name: PropTypes.string,
+  email: PropTypes.string,
+};
+
+Header.defaultProps = {
+  name: '',
+  email: '',
+};
 export default connect(mapStateToProps)(Header);

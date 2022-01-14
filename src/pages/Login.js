@@ -43,10 +43,8 @@ class Login extends Component {
         gravatarEmail,
       },
     } = this;
-    console.log(tokenState);
     setToken();
     setQuiz(tokenState);
-    console.log(name, gravatarEmail);
     setEmail({ name, gravatarEmail });
     history.push('/game');
   }
