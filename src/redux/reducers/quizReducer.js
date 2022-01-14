@@ -1,8 +1,14 @@
-import { ACTION_QUIZ, ACTION_TOKEN } from '../actions';
+import { ACTION_QUIZ, ACTION_TOKEN, EMAIL_USER } from '../actions';
 
 const INITTIAL_STATE = {
   resultsQuiz: [],
   token: '',
+  player: {
+    name: '',
+    assertions: 0,
+    score: 0,
+    gravatarEmail: '',
+  },
 };
 
 export default (state = INITTIAL_STATE, action) => {
@@ -16,6 +22,11 @@ export default (state = INITTIAL_STATE, action) => {
     return {
       ...state,
       token: action.token,
+    };
+  case EMAIL_USER:
+    return {
+      ...state,
+      player: { ...state.player, ...action.dataUser },
     };
   default:
     return state;
