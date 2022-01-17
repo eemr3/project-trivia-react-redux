@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-// import { emailValue } from '../actions/index';
 import { thunkToken, emailUser } from '../redux/actions';
 import logo from '../trivia.png';
 import './Login.css';
@@ -59,13 +58,11 @@ handleClick() {
       validateToken,
     },
   } = this;
-  // setQuiz();
   setEmail({ name, gravatarEmail });
   this.validadteTokenCode(tokenState, validCodeToken);
   if (validateToken) {
     const { setToken } = this.props;
     setToken();
-    // setQuiz();
     this.validadteTokenCode(tokenState, validCodeToken);
   }
 }
@@ -141,13 +138,12 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = (dispatch) => ({
   setToken: () => dispatch(thunkToken()),
-  // setQuiz: () => dispatch(thunkQuiz()),
+
   setEmail: ({ name, gravatarEmail }) => dispatch(emailUser({ name, gravatarEmail })),
 });
 
 Login.propTypes = {
   tokenState: PropTypes.string,
-  // setQuiz: PropTypes.func,
   setToken: PropTypes.func,
   setEmail: PropTypes.func,
   history: PropTypes.shape({
@@ -158,7 +154,6 @@ Login.propTypes = {
 
 Login.defaultProps = {
   tokenState: '',
-  // setQuiz: () => {},
   setToken: () => {},
   setEmail: () => {},
   validCodeToken: 0,
