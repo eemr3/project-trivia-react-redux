@@ -9,6 +9,7 @@ class Quiz extends Component {
     super();
     this.state = {
       responseAPI: false,
+      isLoading: false,
     };
 
     this.handleAnswers = this.handleAnswers.bind(this);
@@ -16,30 +17,32 @@ class Quiz extends Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
+  componentDidMount() {
+    const { setQuiz } = this.props;
+    setQuiz();
+  }
+
   componentDidUpdate(prevprops) {
     const { questions } = this.props;
-    const { code } = this.props;
     if (questions !== prevprops.questions) {
       this.handleAnswers();
     }
-    if (code !== prevprops.code) {
-      this.newToken();
-    }
   }
 
-  newToken() {
-    const { code, newToken, setToken, setQuiz } = this.props;
-    const number = 3;
-    if (code === number) {
-      setToken();
-      setQuiz(newToken);
-    }
-  }
+  // newToken() {
+  //   const { code, newToken, setToken, setQuiz } = this.props;
+  //   const number = 3;
+  //   console.log('code', code);
+  //   console.log('newToken', newToken);
+  //   if (code === number) {
+  //     setToken();
+  //     setQuiz(newToken);
+  //   }
+  // }
 
   handleAnswers() {
     const { questions } = this.props;
     const { responseAPI } = this.state;
-    console.log(questions);
     if (questions.length > 0 && responseAPI !== true) {
       this.setState({ responseAPI: true });
     }
@@ -122,23 +125,22 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   setToken: () => dispatch(thunkToken()),
-  setQuiz: (token) => dispatch(thunkQuiz(token)),
+  setQuiz: () => dispatch(thunkQuiz()),
 });
 
 Quiz.propTypes = {
-  code: PropTypes.number,
-  newToken: PropTypes.string,
-  setQuiz: PropTypes.func,
-  setToken: PropTypes.func,
+  // code: PropTypes.number,
+  // newToken: PropTypes.string,
+  // setQuiz: PropTypes.func,
+  // setToken: PropTypes.func,
   questions: PropTypes.arrayOf([]),
 };
 
 Quiz.defaultProps = {
-  code: 0,
+  // code: 0,
   questions: [],
-  newToken: '',
-  setQuiz: () => {},
-  setToken: () => {},
+  // newToken: '',
+  // setToken: () => {},
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Quiz);
