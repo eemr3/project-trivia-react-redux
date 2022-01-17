@@ -103,8 +103,8 @@ const mapStateToProps = (state) => ({
   tokenState: state.token,
 });
 const mapDispatchToProps = (dispatch) => ({
-  setQuiz: (token) => dispatch(thunkQuiz(token)),
   setToken: () => dispatch(thunkToken()),
+  setQuiz: (token) => dispatch(thunkQuiz(token)),
   setEmail: ({ name, gravatarEmail }) => dispatch(emailUser({ name, gravatarEmail })),
 });
 
