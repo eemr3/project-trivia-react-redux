@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 // import { emailValue } from '../actions/index';
 import { thunkQuiz, thunkToken, emailUser } from '../redux/actions';
-
+import logo from '../trivia.png';
 import './Login.css';
 
 class Login extends Component {
@@ -59,42 +59,57 @@ class Login extends Component {
       onInputChange,
     } = this;
     return (
-      <main className="form-signin">
-        <form>
-          <label htmlFor="name">
-            Nome ou Nick
-            <input
-              data-testid="input-player-name"
-              id="name"
-              name="name"
-              type="text"
-              value={ name }
-              onChange={ onInputChange }
-            />
-          </label>
-          <label htmlFor="gravatarEmail">
-            Email Gravatar
-            <input
-              data-testid="input-gravatar-email"
-              id="gravatarEmail"
-              name="gravatarEmail"
-              type="text"
-              value={ gravatarEmail }
-              onChange={ onInputChange }
-            />
-          </label>
-          <button
-            type="button"
-            data-testid="btn-play"
-            disabled={ buttonDisabled }
-            onClick={ this.handleClick }
-          >
-            Play
-          </button>
-          <Link to="/configuracao" data-testid="btn-settings">Configuração</Link>
-        </form>
-      </main>
+      <>
+        <header className="App-header">
+          <img src={ logo } className="App-logo" alt="logo" />
+        </header>
+        <main className="form-signin">
+          <form>
+            <label htmlFor="name">
+              Nome ou Nick
+              <input
+                data-testid="input-player-name"
+                id="name"
+                name="name"
+                type="text"
+                value={ name }
+                onChange={ onInputChange }
+              />
+            </label>
+            <label htmlFor="gravatarEmail">
+              Email Gravatar
+              <input
+                data-testid="input-gravatar-email"
+                id="gravatarEmail"
+                name="gravatarEmail"
+                type="text"
+                value={ gravatarEmail }
+                onChange={ onInputChange }
+              />
+            </label>
+            <button
+              type="button"
+              data-testid="btn-play"
+              disabled={ buttonDisabled }
+              onClick={ this.handleClick }
+            >
+              <i className="fas fa-play" />
+              {' '}
+              Play
+            </button>
+            <Link
+              className="link-config"
+              to="/configuracao"
+              data-testid="btn-settings"
+            >
+              <i className="fas fa-cogs" />
+              {' '}
+              Configuração
 
+            </Link>
+          </form>
+        </main>
+      </>
     );
   }
 }
