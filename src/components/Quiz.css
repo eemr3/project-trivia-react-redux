@@ -1,0 +1,29 @@
+.quiz-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding-top: 70px;
+}
+
+.quiz-container section {
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  width: 50%;
+}
+
+.quiz-content-question h2 {
+  font-size: 25px;
+}
+
+.quiz-content-question p {
+  font-size: 18px;
+}
+
+.quiz-content-answers {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 40px;
+}
