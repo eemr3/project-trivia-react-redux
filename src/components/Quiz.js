@@ -11,11 +11,16 @@ class Quiz extends Component {
     super();
     this.state = {
       responseAPI: false,
+      stopTimer: false,
+      difficulty: '',
+      score: 0,
+      remainingTimer: 0,
     };
 
     this.handleAnswers = this.handleAnswers.bind(this);
     this.randomAnswers = this.randomAnswers.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.handleScore = this.handleScore.bind(this);
   }
 
   componentDidMount() {
@@ -30,11 +35,37 @@ class Quiz extends Component {
     }
   }
 
+  handleScore() {
+    const { difficulty, remainingTimer } = this.state;
+    const easyPoints = 1;
+    const meddiumPoints = 2;
+    const hardPoints = 3;
+    console.log(remainingTimer);
+    if (difficulty === 'easy') {
+      this.setState((prevState) => ({
+        score: prevState.score + (Number(remainingTimer) * easyPoints),
+      }));
+    }
+    if (difficulty === 'meddium') {
+      this.setState((prevState) => ({
+        score: prevState.score + (Number(remainingTimer) * meddiumPoints),
+      }));
+    }
+    if (difficulty === 'hard') {
+      this.setState((prevState) => ({
+        score: prevState.score + (Number(remainingTimer) * hardPoints),
+      }));
+    }
+  }
+
   handleAnswers() {
     const { questions } = this.props;
     const { responseAPI } = this.state;
     if (questions.length > 0 && responseAPI !== true) {
-      this.setState({ responseAPI: true });
+      this.setState({
+        responseAPI: true,
+        difficulty: questions[0].difficulty,
+      });
     }
   }
 
@@ -75,14 +106,23 @@ class Quiz extends Component {
     );
   }
 
-  handleClick() {
+  handleClick({ target }) {
+    const { timerAfterResponse } = this.props;
     const correctAnswer = document.querySelector('.correct');
     const correctColor = '3px solid rgb(6, 240, 15)';
     const incorrectAnswer = document.querySelectorAll('.incorrect');
     const incorrectColor = '3px solid rgb(255, 0, 0)';
+    const correctScore = 10;
     correctAnswer.style.border = correctColor;
     incorrectAnswer.forEach((element) => {
       element.style.border = incorrectColor;
+    });
+    console.log(timerAfterResponse);
+    this.handleScore();
+    this.setState({
+      stopTimer: true,
+      score: target.className === 'correct' ? correctScore : 0,
+      remainingTimer: timerAfterResponse,
     });
   }
 
@@ -90,6 +130,7 @@ class Quiz extends Component {
     const {
       state: {
         responseAPI,
+        stopTimer,
       },
       randomAnswers,
     } = this;
@@ -108,7 +149,7 @@ class Quiz extends Component {
           {responseAPI && randomAnswers()}
         </section>
         {finalTimeState && <p style={ { color: 'red' } }>Resposta errada!!</p>}
-        <Timer />
+        <Timer timer={ stopTimer } />
       </div>
     );
   }
@@ -118,6 +159,7 @@ const mapStateToProps = (state) => ({
   newToken: state.token,
   questions: state.resultsQuiz,
   finalTimeState: state.finalTime,
+  timerAfterResponse: state.timeValue,
 });
 
 const mapDispatchToProps = (dispatch) => ({

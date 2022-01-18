@@ -6,6 +6,7 @@ export const ACTION_QUIZ = 'ACTION_QUIZ';
 export const EMAIL_USER = 'EMAIL_USER';
 export const EXPIRED_TOKEN = 'EXPIRED_TOKEN';
 export const FINAL_TIME = 'FINAL_TIME';
+export const TIME_VALUE = 'TIME_VALUE';
 
 export const finalTime = () => ({
   type: FINAL_TIME,
@@ -31,6 +32,12 @@ export const emailUser = (dataUser) => (
 export const expiredToken = (code) => (
   {
     type: EXPIRED_TOKEN, code,
+  }
+);
+
+export const timerValue = (timeValue) => (
+  {
+    type: TIME_VALUE, timeValue,
   }
 );
 
