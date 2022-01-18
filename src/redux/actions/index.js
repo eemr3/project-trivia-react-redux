@@ -5,6 +5,11 @@ export const ACTION_TOKEN = 'ACTION_TOKEN';
 export const ACTION_QUIZ = 'ACTION_QUIZ';
 export const EMAIL_USER = 'EMAIL_USER';
 export const EXPIRED_TOKEN = 'EXPIRED_TOKEN';
+export const FINAL_TIME = 'FINAL_TIME';
+
+export const finalTime = () => ({
+  type: FINAL_TIME,
+});
 
 const actionToken = (token) => ({
   type: ACTION_TOKEN,
@@ -49,9 +54,9 @@ export const thunkQuiz = () => async (dispatch, getState) => {
     const CODE_FAILED = 3;
     const data = await requestQuiz(token);
 
-    if (data.response_code === CODE_FAILED) {
-      const newTokenRequest = await requestToken();
-      const newDataQuestion = await requestQuiz(newTokenRequest.token);
+    if (data.response_code === CODE_FAILED) { // Solução utilizando dica do colega/amigo Rafael (Carvalho) Alonso B. Santos - Turma-16Tribo A
+      const newTokenRequest = await requestToken(); // Solução utilizando dica do colega/amigo Rafael (Carvalho) Alonso B. Santos - Turma-16Tribo A
+      const newDataQuestion = await requestQuiz(newTokenRequest.token); // Solução utilizando dica do colega/amigo Rafael (Carvalho) Alonso B. Santos - Turma-16Tribo A
       dispatch(actionQuiz(newDataQuestion));
     } else {
       const response = await requestQuiz(token);
