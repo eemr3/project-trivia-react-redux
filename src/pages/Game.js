@@ -8,7 +8,6 @@ class Game extends Component {
     return (
       <>
         <Header />
-        <h1>Oi</h1>
         <Quiz />
       </>
     );
