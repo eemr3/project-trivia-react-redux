@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { thunkQuiz, thunkToken } from '../redux/actions';
 
 import './Quiz.css';
+import Timer from './Timer';
 
 class Quiz extends Component {
   constructor() {
@@ -38,7 +39,7 @@ class Quiz extends Component {
   }
 
   randomAnswers() {
-    const { questions } = this.props;
+    const { questions, finalTimeState } = this.props;
     const incorrectAnswers = questions[0].incorrect_answers;
     const listAnswers = [questions[0].correct_answer,
       ...questions[0].incorrect_answers];
@@ -54,6 +55,7 @@ class Quiz extends Component {
         }
         return (
           <button
+            disabled={ finalTimeState }
             type="button"
             className={ className }
             key={ index }
@@ -91,7 +93,7 @@ class Quiz extends Component {
       },
       randomAnswers,
     } = this;
-    const { questions } = this.props;
+    const { questions, finalTimeState } = this.props;
     return (
       <div className="quiz-container">
         <section className="quiz-content-question">
@@ -105,6 +107,8 @@ class Quiz extends Component {
         <section data-testid="answer-options" className="quiz-content-answers">
           {responseAPI && randomAnswers()}
         </section>
+        {finalTimeState && <p style={ { color: 'red' } }>Resposta errada!!</p>}
+        <Timer />
       </div>
     );
   }
@@ -112,8 +116,8 @@ class Quiz extends Component {
 
 const mapStateToProps = (state) => ({
   newToken: state.token,
-  code: state.code,
   questions: state.resultsQuiz,
+  finalTimeState: state.finalTime,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -123,12 +127,14 @@ const mapDispatchToProps = (dispatch) => ({
 
 Quiz.propTypes = {
   setQuiz: PropTypes.func,
+  finalTimeState: PropTypes.bool,
   questions: PropTypes.arrayOf(PropTypes.shape()),
 };
 
 Quiz.defaultProps = {
   setQuiz: () => {},
   questions: {},
+  finalTimeState: PropTypes.bool,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Quiz);

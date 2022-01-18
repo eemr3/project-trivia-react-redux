@@ -1,4 +1,9 @@
-import { ACTION_QUIZ, ACTION_TOKEN, EMAIL_USER, EXPIRED_TOKEN } from '../actions';
+import {
+  ACTION_QUIZ,
+  ACTION_TOKEN,
+  EMAIL_USER,
+  EXPIRED_TOKEN,
+  FINAL_TIME } from '../actions';
 
 const INITTIAL_STATE = {
   resultsQuiz: [],
@@ -10,6 +15,7 @@ const INITTIAL_STATE = {
     gravatarEmail: '',
   },
   code: 0,
+  finalTime: false,
 };
 
 export default (state = INITTIAL_STATE, action) => {
@@ -33,6 +39,11 @@ export default (state = INITTIAL_STATE, action) => {
     return {
       ...state,
       code: action.code,
+    };
+  case FINAL_TIME:
+    return {
+      ...state,
+      finalTime: true,
     };
   default:
     return state;
