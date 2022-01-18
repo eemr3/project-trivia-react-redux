@@ -16,6 +16,7 @@ class Timer extends Component {
     const { finalTime } = this.props;
 
     // https://medium.com/@staceyzander/setinterval-and-clearinterval-in-react-b1d0ee1e1a6a
+    // commst
 
     this.intervalID = setInterval(() => {
       const { seconds } = this.state;
