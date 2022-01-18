@@ -4,7 +4,8 @@ import {
   EMAIL_USER,
   EXPIRED_TOKEN,
   FINAL_TIME,
-  TIME_VALUE } from '../actions';
+  TIME_VALUE, SCORE_VALUE,
+} from '../actions';
 
 const INITTIAL_STATE = {
   resultsQuiz: [],
@@ -18,6 +19,7 @@ const INITTIAL_STATE = {
   code: 0,
   finalTime: false,
   timeValue: 0,
+  valuesToScore: {},
 };
 
 export default (state = INITTIAL_STATE, action) => {
@@ -51,6 +53,10 @@ export default (state = INITTIAL_STATE, action) => {
     return {
       ...state,
       timeValue: action.timeValue,
+    };
+  case SCORE_VALUE:
+    return { ...state,
+      valuesToScore: action.payload,
     };
   default:
     return state;

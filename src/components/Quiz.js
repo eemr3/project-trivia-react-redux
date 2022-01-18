@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { thunkQuiz, thunkToken } from '../redux/actions';
+import { scoreValue, thunkQuiz, thunkToken, totalScoreValue } from '../redux/actions';
 
 import './Quiz.css';
 import Timer from './Timer';
@@ -15,6 +15,7 @@ class Quiz extends Component {
       difficulty: '',
       score: 0,
       remainingTimer: 0,
+      valueDificulty: 0,
     };
 
     this.handleAnswers = this.handleAnswers.bind(this);
@@ -28,32 +29,35 @@ class Quiz extends Component {
     setQuiz();
   }
 
-  componentDidUpdate(prevprops) {
-    const { questions } = this.props;
-    if (questions !== prevprops.questions) {
+  componentDidUpdate(prevProps) {
+    const { questions, totalScore, setTotalScore } = this.props;
+    if (questions !== prevProps.questions) {
       this.handleAnswers();
     }
+
+    // if (totalScore !== prevProps.totalScore) {
+    //   setTotalScore();
+    // }
   }
 
   handleScore() {
-    const { difficulty, remainingTimer } = this.state;
+    const { difficulty } = this.state;
     const easyPoints = 1;
     const meddiumPoints = 2;
     const hardPoints = 3;
-    console.log(remainingTimer);
     if (difficulty === 'easy') {
-      this.setState((prevState) => ({
-        score: prevState.score + (Number(remainingTimer) * easyPoints),
+      this.setState(() => ({
+        valueDificulty: easyPoints,
       }));
     }
-    if (difficulty === 'meddium') {
-      this.setState((prevState) => ({
-        score: prevState.score + (Number(remainingTimer) * meddiumPoints),
+    if (difficulty === 'medium') {
+      this.setState(() => ({
+        valueDificulty: meddiumPoints,
       }));
     }
     if (difficulty === 'hard') {
-      this.setState((prevState) => ({
-        score: prevState.score + (Number(remainingTimer) * hardPoints),
+      this.setState(() => ({
+        valueDificulty: hardPoints,
       }));
     }
   }
@@ -107,7 +111,7 @@ class Quiz extends Component {
   }
 
   handleClick({ target }) {
-    const { timerAfterResponse } = this.props;
+    const { setValueToScore } = this.props;
     const correctAnswer = document.querySelector('.correct');
     const correctColor = '3px solid rgb(6, 240, 15)';
     const incorrectAnswer = document.querySelectorAll('.incorrect');
@@ -117,13 +121,14 @@ class Quiz extends Component {
     incorrectAnswer.forEach((element) => {
       element.style.border = incorrectColor;
     });
-    console.log(timerAfterResponse);
-    this.handleScore();
     this.setState({
       stopTimer: true,
       score: target.className === 'correct' ? correctScore : 0,
-      remainingTimer: timerAfterResponse,
+    }, () => {
+      const { score, valueDificulty } = this.state;
+      setValueToScore({ score, valueDificulty });
     });
+    this.handleScore();
   }
 
   render() {
@@ -160,11 +165,14 @@ const mapStateToProps = (state) => ({
   questions: state.resultsQuiz,
   finalTimeState: state.finalTime,
   timerAfterResponse: state.timeValue,
+  totalScore: state.totalScore,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   setToken: () => dispatch(thunkToken()),
   setQuiz: () => dispatch(thunkQuiz()),
+  setValueToScore: (value) => dispatch(scoreValue(value)),
+  setTotalScore: () => dispatch(totalScoreValue()),
 });
 
 Quiz.propTypes = {

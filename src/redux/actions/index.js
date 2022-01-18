@@ -7,6 +7,17 @@ export const EMAIL_USER = 'EMAIL_USER';
 export const EXPIRED_TOKEN = 'EXPIRED_TOKEN';
 export const FINAL_TIME = 'FINAL_TIME';
 export const TIME_VALUE = 'TIME_VALUE';
+export const SCORE_VALUE = 'SCORE_VALUE';
+export const TOTAL_SCORE_VALUE = 'TOTAL_SCORE_VALUE';
+
+export const scoreValue = (payload) => ({
+  type: SCORE_VALUE,
+  payload,
+});
+
+export const totalScoreValue = () => ({
+  type: SCORE_VALUE,
+});
 
 export const finalTime = () => ({
   type: FINAL_TIME,
