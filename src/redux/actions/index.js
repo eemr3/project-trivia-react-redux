@@ -31,20 +31,33 @@ export const expiredToken = (code) => (
 
 export const thunkToken = () => async (dispatch) => {
   try {
-    const response = await requestToken();
-    const data = await response;
-    dispatch(actionToken(data));
+    let response = await requestToken();
+    if (response.token === null || response.response_code !== 0) {
+      response = await requestToken();
+    } else {
+      dispatch(actionToken(response.token));
+      dispatch(expiredToken(response.response_code));
+    }
   } catch (error) {
     console.log(error);
   }
 };
 
-export const thunkQuiz = (token) => async (dispatch) => {
+export const thunkQuiz = () => async (dispatch, getState) => {
   try {
-    const response = await requestQuiz(token);
-    const data = await response;
-    dispatch(actionQuiz(data.results));
-    dispatch(expiredToken(data.response_code));
+    const { token } = getState();
+    const CODE_FAILED = 3;
+    const data = await requestQuiz(token);
+
+    if (data.response_code === CODE_FAILED) {
+      const newTokenRequest = await requestToken();
+      const newDataQuestion = await requestQuiz(newTokenRequest.token);
+      dispatch(actionQuiz(newDataQuestion));
+    } else {
+      const response = await requestQuiz(token);
+      const dataApi = await response;
+      dispatch(actionQuiz(dataApi.results));
+    }
   } catch (error) {
     console.error(error);
   }

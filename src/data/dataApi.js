@@ -2,7 +2,7 @@ export const requestToken = async () => {
   const URL_TOKEN = 'https://opentdb.com/api_token.php?command=request';
   const response = await fetch(URL_TOKEN);
   const data = await response.json();
-  return data.token;
+  return data;
 };
 
 export const requestQuiz = async (token) => {

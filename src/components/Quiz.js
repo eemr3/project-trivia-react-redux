@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-// // import { emailValue } from '../actions/index';
 import { thunkQuiz, thunkToken } from '../redux/actions';
+
+import './Quiz.css';
 
 class Quiz extends Component {
   constructor() {
@@ -16,30 +17,21 @@ class Quiz extends Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  componentDidUpdate(prevprops) {
-    const { questions } = this.props;
-    const { code } = this.props;
-    if (questions !== prevprops.questions) {
-      this.handleAnswers();
-    }
-    if (code !== prevprops.code) {
-      this.newToken();
-    }
+  componentDidMount() {
+    const { setQuiz } = this.props;
+    setQuiz();
   }
 
-  newToken() {
-    const { code, newToken, setToken, setQuiz } = this.props;
-    const number = 3;
-    if (code === number) {
-      setToken();
-      setQuiz(newToken);
+  componentDidUpdate(prevprops) {
+    const { questions } = this.props;
+    if (questions !== prevprops.questions) {
+      this.handleAnswers();
     }
   }
 
   handleAnswers() {
     const { questions } = this.props;
     const { responseAPI } = this.state;
-    console.log(questions);
     if (questions.length > 0 && responseAPI !== true) {
       this.setState({ responseAPI: true });
     }
@@ -67,6 +59,12 @@ class Quiz extends Component {
             key={ index }
             data-testid={ testId }
             onClick={ this.handleClick }
+            style={ {
+              cursor: 'pointer',
+              fontSize: '18px',
+              marginBottom: '4px',
+              padding: '15px',
+              width: 350 } }
           >
             { answer }
           </button>
@@ -92,21 +90,19 @@ class Quiz extends Component {
         responseAPI,
       },
       randomAnswers,
-      // handleAnswers,
     } = this;
     const { questions } = this.props;
     return (
-      <div>
-        {/* <div>{handleAnswers()}</div> */}
-        <section>
-          <div data-testid="question-category">
+      <div className="quiz-container">
+        <section className="quiz-content-question">
+          <h2 data-testid="question-category">
             {responseAPI && `Categoria - ${questions[0].category}`}
-          </div>
-          <div data-testid="question-text">
+          </h2>
+          <p data-testid="question-text">
             {responseAPI && questions[0].question}
-          </div>
+          </p>
         </section>
-        <section data-testid="answer-options">
+        <section data-testid="answer-options" className="quiz-content-answers">
           {responseAPI && randomAnswers()}
         </section>
       </div>
@@ -122,23 +118,17 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   setToken: () => dispatch(thunkToken()),
-  setQuiz: (token) => dispatch(thunkQuiz(token)),
+  setQuiz: () => dispatch(thunkQuiz()),
 });
 
 Quiz.propTypes = {
-  code: PropTypes.number,
-  newToken: PropTypes.string,
   setQuiz: PropTypes.func,
-  setToken: PropTypes.func,
-  questions: PropTypes.arrayOf([]),
+  questions: PropTypes.arrayOf(PropTypes.shape()),
 };
 
 Quiz.defaultProps = {
-  code: 0,
-  questions: [],
-  newToken: '',
   setQuiz: () => {},
-  setToken: () => {},
+  questions: {},
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Quiz);
