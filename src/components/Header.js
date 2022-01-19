@@ -24,7 +24,7 @@ class Header extends Component {
 
     handleScore = () => {
       const { timeValue, difficultyValue, setScore, correctAnswer } = this.props;
-      if (correctAnswer) {
+      if (correctAnswer.answerCorrect) {
         const defaultValue = 10;
         const calcScore = defaultValue + (timeValue * difficultyValue);
         this.setState((prevState) => ({
