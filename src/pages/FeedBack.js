@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import Message from '../components/Message';
 
@@ -24,4 +25,14 @@ const mapStateToProps = (state) => ({
   score: state.player.score,
   assertions: state.player.assertions,
 });
+
+FeedBack.propTypes = {
+  score: PropTypes.number,
+  assertions: PropTypes.number,
+};
+
+FeedBack.defaultProps = {
+  score: 0,
+  assertions: 0,
+};
 export default connect(mapStateToProps)(FeedBack);
