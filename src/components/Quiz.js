@@ -1,190 +1,169 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { scoreValue, thunkQuiz, thunkToken, totalScoreValue } from '../redux/actions';
+import Timer from './Timer';
+import { correctAnswer, difficultyQuestion } from '../redux/actions';
 
 import './Quiz.css';
-import Timer from './Timer';
+
+/* Mensão a ajuda para refazer e rafatorar o código dos requsitos 5,6,7 com a ajuda
+  do meu filho e amigo Tiago da Silva Moreira da Turma-12
+*/
 
 class Quiz extends Component {
   constructor() {
     super();
     this.state = {
-      responseAPI: false,
-      stopTimer: false,
-      difficulty: '',
-      score: 0,
-      remainingTimer: 0,
-      valueDificulty: 0,
+      listButton: [],
+      click: false,
+      answerCorrect: false,
     };
-
-    this.handleAnswers = this.handleAnswers.bind(this);
-    this.randomAnswers = this.randomAnswers.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-    this.handleScore = this.handleScore.bind(this);
   }
 
   componentDidMount() {
-    const { setQuiz } = this.props;
-    setQuiz();
+    this.setButtonState();
   }
 
-  componentDidUpdate(prevProps) {
-    const { questions, totalScore, setTotalScore } = this.props;
-    if (questions !== prevProps.questions) {
-      this.handleAnswers();
-    }
+  setButtonState = () => {
+    const arrayBtnAnswer = this.handleMountButtons();
+    this.setState({ listButton: arrayBtnAnswer });
 
-    // if (totalScore !== prevProps.totalScore) {
-    //   setTotalScore();
-    // }
-  }
-
-  handleScore() {
-    const { difficulty } = this.state;
-    const easyPoints = 1;
-    const meddiumPoints = 2;
-    const hardPoints = 3;
-    if (difficulty === 'easy') {
-      this.setState(() => ({
-        valueDificulty: easyPoints,
-      }));
-    }
-    if (difficulty === 'medium') {
-      this.setState(() => ({
-        valueDificulty: meddiumPoints,
-      }));
-    }
-    if (difficulty === 'hard') {
-      this.setState(() => ({
-        valueDificulty: hardPoints,
-      }));
+    const { questions: { difficulty }, setDifficulty } = this.props;
+    const scoreHard = 3;
+    switch (difficulty) {
+    case 'easy':
+      break;
+    case 'medium':
+      setDifficulty(2);
+      break;
+    case 'hard':
+      setDifficulty(scoreHard);
+      break;
+    default:
+      return 0;
     }
   }
 
-  handleAnswers() {
-    const { questions } = this.props;
-    const { responseAPI } = this.state;
-    if (questions.length > 0 && responseAPI !== true) {
-      this.setState({
-        responseAPI: true,
-        difficulty: questions[0].difficulty,
-      });
-    }
-  }
-
-  randomAnswers() {
-    const { questions, finalTimeState } = this.props;
-    const incorrectAnswers = questions[0].incorrect_answers;
-    const listAnswers = [questions[0].correct_answer,
-      ...questions[0].incorrect_answers];
-    const number = 0.5;
-    const randomList = listAnswers.sort(() => Math.random() - number);
-
-    return (
-      randomList.map((answer, index) => {
-        let testId = 'correct-answer';
-        let className = 'correct';
-        if (incorrectAnswers.some((options) => answer === options)) {
-          testId = `wrong-answer-${index}`; className = ('incorrect');
-        }
-        return (
-          <button
-            disabled={ finalTimeState }
-            type="button"
-            className={ className }
-            key={ index }
-            data-testid={ testId }
-            onClick={ this.handleClick }
-            style={ {
-              cursor: 'pointer',
-              fontSize: '18px',
-              marginBottom: '4px',
-              padding: '15px',
-              width: 350 } }
-          >
-            { answer }
-          </button>
-        );
-      })
-    );
-  }
-
-  handleClick({ target }) {
-    const { setValueToScore } = this.props;
-    const correctAnswer = document.querySelector('.correct');
-    const correctColor = '3px solid rgb(6, 240, 15)';
-    const incorrectAnswer = document.querySelectorAll('.incorrect');
-    const incorrectColor = '3px solid rgb(255, 0, 0)';
-    const correctScore = 10;
-    correctAnswer.style.border = correctColor;
-    incorrectAnswer.forEach((element) => {
-      element.style.border = incorrectColor;
+  handleChangeStyle = () => {
+    const btns = document.querySelectorAll('button');
+    btns.forEach((btn) => {
+      if (btn.value === 'wrong') {
+        btn.style.border = '3px solid rgb(255, 0, 0)';
+        btn.disabled = true;
+      }
+      if (btn.value === 'correct') {
+        btn.style.border = '3px solid rgb(6, 240, 15)';
+        btn.disabled = true;
+      }
     });
     this.setState({
-      stopTimer: true,
-      score: target.className === 'correct' ? correctScore : 0,
-    }, () => {
-      const { score, valueDificulty } = this.state;
-      setValueToScore({ score, valueDificulty });
+      click: true,
     });
-    this.handleScore();
+  }
+
+  shuffleArrayButtonAnswers = (arryBtn) => {
+    /*
+      Algoritmo de embaralhamento de Fisher–Yates retirado do Stackoverflow link:
+      https://pt.stackoverflow.com/questions/406037/mostrar-elementos-de-um-array-em-ordem-aleat%C3%B3ria
+      Autor da resposta no Stackoverflow: Augusto Vasques
+     */
+    for (let i = arryBtn.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arryBtn[i], arryBtn[j]] = [arryBtn[j], arryBtn[i]];
+    }
+    return arryBtn;
+  }
+
+  handleMountButtons = () => {
+    const creanteBtn = this.creatArrayButtonAnswers();
+    const btnShuffle = this.shuffleArrayButtonAnswers(creanteBtn);
+    return btnShuffle;
+  }
+
+  handleCorrectClick = () => {
+    this.handleChangeStyle();
+
+    const { setCorrectAnswer } = this.props;
+    this.setState({ answerCorrect: true }, () => {
+      const { answerCorrect } = this.state;
+      setCorrectAnswer(answerCorrect);
+    });
+  }
+
+  creatArrayButtonAnswers = () => {
+    const { questions } = this.props;
+    const btnList = questions.incorrect_answers.map((incorrect, index) => (
+      <button
+        key={ index + 1 }
+        data-testid={ `wrong-answer-${index}` }
+        value="wrong"
+        onClick={ this.handleChangeStyle }
+        type="button"
+        className="btn-answer"
+      >
+        {incorrect}
+      </button>
+    ));
+    const btnCorrect = (
+      <button
+        data-testid="correct-answer"
+        onClick={ this.handleCorrectClick }
+        type="button"
+        value="correct"
+        className="btn-answer"
+      >
+        {questions.correct_answer}
+      </button>
+    );
+    btnList.push(btnCorrect);
+    return btnList;
   }
 
   render() {
-    const {
-      state: {
-        responseAPI,
-        stopTimer,
-      },
-      randomAnswers,
-    } = this;
-    const { questions, finalTimeState } = this.props;
+    const { questions } = this.props;
+    const { listButton, click } = this.state;
     return (
-      <div className="quiz-container">
-        <section className="quiz-content-question">
-          <h2 data-testid="question-category">
-            {responseAPI && `Categoria - ${questions[0].category}`}
-          </h2>
-          <p data-testid="question-text">
-            {responseAPI && questions[0].question}
-          </p>
-        </section>
+      <section className="quiz-container">
+        <h2 data-testid="question-category">{questions.category}</h2>
+        <p data-testid="question-text">{questions.question}</p>
         <section data-testid="answer-options" className="quiz-content-answers">
-          {responseAPI && randomAnswers()}
+          {listButton}
         </section>
-        {finalTimeState && <p style={ { color: 'red' } }>Resposta errada!!</p>}
-        <Timer timer={ stopTimer } />
-      </div>
+        <Timer
+          handleChangeStyle={ this.handleChangeStyle }
+          click={ click }
+        />
+      </section>
     );
   }
 }
 
 const mapStateToProps = (state) => ({
-  newToken: state.token,
-  questions: state.resultsQuiz,
-  finalTimeState: state.finalTime,
-  timerAfterResponse: state.timeValue,
-  totalScore: state.totalScore,
+  finalTime: state.finalTime,
+  seconds: state.timeValue,
+  score: state.player.score,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  setToken: () => dispatch(thunkToken()),
-  setQuiz: () => dispatch(thunkQuiz()),
-  setValueToScore: (value) => dispatch(scoreValue(value)),
-  setTotalScore: () => dispatch(totalScoreValue()),
+  setCorrectAnswer: (bool) => dispatch(correctAnswer(bool)),
+  setDifficulty: (difficulty) => dispatch(difficultyQuestion(difficulty)),
 });
 
 Quiz.propTypes = {
-  setQuiz: PropTypes.func,
-  finalTimeState: PropTypes.bool,
-  questions: PropTypes.arrayOf(PropTypes.shape()),
+  questions: PropTypes.shape({
+    category: PropTypes.string,
+    question: PropTypes.string,
+    correct_answer: PropTypes.string,
+    incorrect_answers: PropTypes.arrayOf(PropTypes.string),
+    difficulty: PropTypes.string,
+  }),
+  setCorrectAnswer: PropTypes.func,
+  setDifficulty: PropTypes.func,
 };
 
 Quiz.defaultProps = {
-  setQuiz: () => {},
   questions: {},
-  finalTimeState: PropTypes.bool,
+  setCorrectAnswer: () => {},
+  setDifficulty: () => {},
 };
-
 export default connect(mapStateToProps, mapDispatchToProps)(Quiz);

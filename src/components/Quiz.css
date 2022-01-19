@@ -20,6 +20,13 @@
   font-size: 18px;
 }
 
+.btn-answer {
+  font-size: 1.2rem;
+  margin-bottom: 5px;
+  padding: 17px;
+  width: 350px;
+}
+
 .quiz-content-answers {
   align-items: center;
   display: flex;

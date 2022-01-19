@@ -8,6 +8,6 @@ export const requestToken = async () => {
 export const requestQuiz = async (token) => {
   const URL_QUIZ = `https://opentdb.com/api.php?amount=5&token=${token}`;
   const response = await fetch(URL_QUIZ);
-  const data = response.json();
+  const data = await response.json();
   return data;
 };

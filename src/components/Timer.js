@@ -1,23 +1,24 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { finalTime, timerValue } from '../redux/actions';
+import { timerValue } from '../redux/actions';
+
+/* Mensão a ajuda para refazer e rafatorar o código dos requsitos 5,6,7 com a ajuda
+  do meu filho e amigo Tiago da Silva Moreira da Turma-12
+*/
+import './Timer.css';
 
 class Timer extends Component {
   constructor() {
     super();
-
     this.state = {
       seconds: 30,
-      remainingTime: '',
     };
-
-    this.handleRemainingTime = this.handleRemainingTime.bind(this);
   }
 
   componentDidMount() {
     const TIME_BEGINS = 1000;
-    const { setFinalTime } = this.props;
+    const { handleChangeStyle } = this.props;
 
     // https://medium.com/@staceyzander/setinterval-and-clearinterval-in-react-b1d0ee1e1a6a
     // commst
@@ -30,16 +31,17 @@ class Timer extends Component {
           seconds: attState.seconds - 1,
         }));
       } else {
-        setFinalTime();
+        handleChangeStyle();
       }
     }, TIME_BEGINS);
   }
 
-  componentDidUpdate(prevProps) {
-    const { finalTimeState, timer } = this.props;
-    if (finalTimeState !== prevProps.finalTimeState || timer !== prevProps.timer) {
+  componentDidUpdate() {
+    const { seconds } = this.state;
+    const { click, setTimerValue } = this.props;
+    if (click) {
       clearInterval(this.intervalID);
-      this.handleRemainingTime();
+      setTimerValue(seconds);
     }
   }
 
@@ -47,25 +49,20 @@ class Timer extends Component {
     clearInterval(this.intervalID);
   }
 
-  handleRemainingTime() {
-    this.setState((prevState) => ({
-      remainingTime: prevState.seconds,
-    }), () => {
-      const { setTimeValue } = this.props;
-      const { remainingTime } = this.state;
-      setTimeValue(remainingTime);
-    });
-  }
-
   render() {
-    const { seconds, finish } = this.state;
+    const { seconds } = this.state;
 
     return (
       <div>
-        { seconds }
-        <span>
-          { finish }
-        </span>
+        <p>
+          Tempo:
+          {' '}
+          <span>
+            { seconds }
+            s
+          </span>
+        </p>
+
       </div>
     );
   }
@@ -73,18 +70,22 @@ class Timer extends Component {
 
 const mapStateToProps = (state) => ({
   finalTimeState: state.finalTime,
+  score: state.totalValue,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  setFinalTime: () => dispatch(finalTime()),
-  setTimeValue: (timeValue) => dispatch(timerValue(timeValue)),
+  setTimerValue: (timer) => dispatch(timerValue(timer)),
 });
 
 Timer.propTypes = {
-  finalTimeState: PropTypes.bool.isRequired,
-  setFinalTime: PropTypes.func.isRequired,
-  setTimeValue: PropTypes.func.isRequired,
-  timer: PropTypes.bool.isRequired,
+  handleChangeStyle: PropTypes.func,
+  click: PropTypes.bool,
+  setTimerValue: PropTypes.func,
 };
 
+Timer.defaultProps = {
+  handleChangeStyle: () => {},
+  setTimerValue: () => {},
+  click: false,
+};
 export default connect(mapStateToProps, mapDispatchToProps)(Timer);

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import hashEmail from '../service/hashEmail';
 
 import './Header.css';
+import { scoreValue } from '../redux/actions';
 
 class Header extends Component {
   constructor() {
@@ -22,13 +23,18 @@ class Header extends Component {
   }
 
     handleScore = () => {
-      const { score, valueDificulty, timeValue } = this.props;
-      this.setState({
-        totalScore: (valueDificulty * timeValue) + score,
-      }, () => {
-        const { totalScore } = this.state;
-        localStorage.setItem('totalScore', totalScore);
-      });
+      const { timeValue, difficultyValue, setScore, correctAnswer } = this.props;
+      if (correctAnswer) {
+        const defaultValue = 10;
+        const calcScore = defaultValue + (timeValue * difficultyValue);
+        this.setState((prevState) => ({
+          totalScore: prevState.totalScore + calcScore,
+        }), () => {
+          const { totalScore } = this.state;
+          setScore(totalScore);
+          localStorage.setItem('totalScore', totalScore);
+        });
+      }
     }
 
     hashUserEmail() {
@@ -37,8 +43,8 @@ class Header extends Component {
     }
 
     render() {
-      const { name } = this.props;
-      const { totalScore } = this.state;
+      const { name, score } = this.props;
+
       const email = this.hashUserEmail();
       return (
         <header className="container">
@@ -50,7 +56,7 @@ class Header extends Component {
             />
             <p data-testid="header-player-name">{name}</p>
           </div>
-          <p data-testid="header-score">{totalScore}</p>
+          <p data-testid="header-score">{score}</p>
         </header>
       );
     }
@@ -59,18 +65,34 @@ class Header extends Component {
 const mapStateToProps = (state) => ({
   name: state.player.name,
   email: state.player.gravatarEmail,
-  score: state.valuesToScore.score,
-  valueDificulty: state.valuesToScore.valueDificulty,
+  score: state.player.score,
   timeValue: state.timeValue,
+  difficultyValue: state.difficulty,
+  correctAnswer: state.correctAnswers,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  setScore: (score) => dispatch(scoreValue(score)),
 });
 
 Header.propTypes = {
+  difficultyValue: PropTypes.number,
+  score: PropTypes.number,
   name: PropTypes.string,
   email: PropTypes.string,
+  setScore: PropTypes.func,
+  timeValue: PropTypes.number,
+  correctAnswer: PropTypes.bool,
 };
 
 Header.defaultProps = {
+  timeValue: 0,
+  difficultyValue: 0,
+  setScore: () => {},
   name: '',
   email: '',
+  score: 0,
+  correctAnswer: false,
 };
-export default connect(mapStateToProps)(Header);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
