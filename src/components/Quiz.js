@@ -17,6 +17,7 @@ class Quiz extends Component {
       listButton: [],
       click: false,
       answerCorrect: false,
+      enabledButtonNext: true,
     };
   }
 
@@ -58,6 +59,7 @@ class Quiz extends Component {
     });
     this.setState({
       click: true,
+      enabledButtonNext: false,
     });
   }
 
@@ -92,6 +94,7 @@ class Quiz extends Component {
 
   creatArrayButtonAnswers = () => {
     const { questions } = this.props;
+
     const btnList = questions.incorrect_answers.map((incorrect, index) => (
       <button
         key={ index + 1 }
@@ -120,8 +123,9 @@ class Quiz extends Component {
   }
 
   render() {
-    const { questions } = this.props;
-    const { listButton, click } = this.state;
+    const { questions, handleClick } = this.props;
+
+    const { listButton, click, enabledButtonNext } = this.state;
     return (
       <section className="quiz-container">
         <h2 data-testid="question-category">{questions.category}</h2>
@@ -133,6 +137,18 @@ class Quiz extends Component {
           handleChangeStyle={ this.handleChangeStyle }
           click={ click }
         />
+        <button
+          data-testid="btn-next"
+          type="button"
+          hidden={ enabledButtonNext }
+          className="btn-next"
+          onClick={ handleClick }
+        >
+          Next
+          {' '}
+          <i className="fas fa-arrow-circle-right" />
+
+        </button>
       </section>
     );
   }
@@ -150,6 +166,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 Quiz.propTypes = {
+  handleClick: PropTypes.func,
   questions: PropTypes.shape({
     category: PropTypes.string,
     question: PropTypes.string,
@@ -162,6 +179,7 @@ Quiz.propTypes = {
 };
 
 Quiz.defaultProps = {
+  handleClick: () => {},
   questions: {},
   setCorrectAnswer: () => {},
   setDifficulty: () => {},

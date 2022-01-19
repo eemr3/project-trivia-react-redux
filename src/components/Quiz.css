@@ -1,4 +1,5 @@
 .quiz-container {
+  align-items: center;
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -33,4 +34,10 @@
   flex-direction: column;
   justify-content: center;
   padding-top: 40px;
+}
+
+.btn-next {
+  font-size: 1.2rem;
+  padding: 10px;
+  width: 200px;
 }

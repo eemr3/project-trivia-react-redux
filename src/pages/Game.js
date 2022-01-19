@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Redirect } from 'react-router-dom';
 import Header from '../components/Header';
 import Quiz from '../components/Quiz';
 import { thunkQuiz } from '../redux/actions';
@@ -27,11 +28,15 @@ class Game extends Component {
   render() {
     const { questions } = this.props;
     const { nextQuestion } = this.state;
+    if (nextQuestion === questions.length && nextQuestion > 0) {
+      return <Redirect to="/feedback" />;
+    }
     return (
       <>
         <Header />
         {questions.length === 0 ? (<p>Loading...</p>) : (
           <Quiz
+            key={ nextQuestion }
             questions={ questions[nextQuestion] }
             handleClick={ this.handleNextClick }
           />
