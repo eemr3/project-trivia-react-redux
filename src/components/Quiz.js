@@ -23,7 +23,11 @@ class Quiz extends Component {
   }
 
   componentDidMount() {
+    const { answerCorrect } = this.state;
+    const { setCorrectAnswer } = this.props;
+    const defaultValue = 0;
     this.setButtonState();
+    setCorrectAnswer({ answerCorrect, defaultValue });
   }
 
   setButtonState = () => {
@@ -34,6 +38,7 @@ class Quiz extends Component {
     const scoreHard = 3;
     switch (difficulty) {
     case 'easy':
+      setDifficulty(1);
       break;
     case 'medium':
       setDifficulty(2);
