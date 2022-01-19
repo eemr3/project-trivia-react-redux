@@ -18,6 +18,7 @@ class Quiz extends Component {
       click: false,
       answerCorrect: false,
       enabledButtonNext: true,
+      quantityCorrectAnswer: 0,
     };
   }
 
@@ -84,11 +85,16 @@ class Quiz extends Component {
 
   handleCorrectClick = () => {
     this.handleChangeStyle();
-
     const { setCorrectAnswer } = this.props;
-    this.setState({ answerCorrect: true }, () => {
+    this.setState((prevState) => ({
+      quantityCorrectAnswer: prevState.quantityCorrectAnswer + 1,
+    }));
+    this.setState({
+      answerCorrect: true,
+    }, () => {
       const { answerCorrect } = this.state;
-      setCorrectAnswer(answerCorrect);
+      const defaultValue = 1;
+      setCorrectAnswer({ answerCorrect, defaultValue });
     });
   }
 
@@ -161,7 +167,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  setCorrectAnswer: (bool) => dispatch(correctAnswer(bool)),
+  setCorrectAnswer: (object) => dispatch(correctAnswer(object)),
   setDifficulty: (difficulty) => dispatch(difficultyQuestion(difficulty)),
 });
 

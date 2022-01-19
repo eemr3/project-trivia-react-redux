@@ -22,7 +22,10 @@ const INITTIAL_STATE = {
   finalTime: false,
   timeValue: 0,
   difficulty: 0,
-  correctAnswers: false,
+  correctAnswers: {
+    answerCorrect: false,
+    defaultValue: 0,
+  },
 };
 
 export default (state = INITTIAL_STATE, action) => {
@@ -64,7 +67,12 @@ export default (state = INITTIAL_STATE, action) => {
   case CORRECT_ANSWER:
     return {
       ...state,
-      correctAnswers: action.bool,
+      correctAnswers: {
+        // ...state.correctAnswers,
+        answerCorrect: action.bool.answerCorrect,
+      },
+      player: { ...state.player,
+        assertions: state.player.assertions + action.bool.defaultValue },
     };
   default:
     return state;
