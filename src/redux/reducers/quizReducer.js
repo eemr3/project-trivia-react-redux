@@ -3,8 +3,11 @@ import {
   ACTION_TOKEN,
   EMAIL_USER,
   EXPIRED_TOKEN,
-  FINAL_TIME,
-  TIME_VALUE } from '../actions';
+  TIME_VALUE,
+  SCORE_VALUE,
+  DIFFICULTY_QUESTION,
+  CORRECT_ANSWER,
+} from '../actions';
 
 const INITTIAL_STATE = {
   resultsQuiz: [],
@@ -18,6 +21,8 @@ const INITTIAL_STATE = {
   code: 0,
   finalTime: false,
   timeValue: 0,
+  difficulty: 0,
+  correctAnswers: false,
 };
 
 export default (state = INITTIAL_STATE, action) => {
@@ -42,19 +47,26 @@ export default (state = INITTIAL_STATE, action) => {
       ...state,
       code: action.code,
     };
-  case FINAL_TIME:
-    return {
-      ...state,
-      finalTime: true,
-    };
   case TIME_VALUE:
     return {
       ...state,
       timeValue: action.timeValue,
     };
+  case SCORE_VALUE:
+    return { ...state,
+      player: { ...state.player, score: action.payload },
+    };
+  case DIFFICULTY_QUESTION:
+    return {
+      ...state,
+      difficulty: action.payload,
+    };
+  case CORRECT_ANSWER:
+    return {
+      ...state,
+      correctAnswers: action.bool,
+    };
   default:
     return state;
   }
 };
-
-// export default quizReducer;

@@ -1,0 +1,12 @@
+.timer-container {
+  text-align: left;
+  width: 350px;
+}
+
+p {
+  font-size: 1.2rem;
+}
+
+span {
+  color: red;
+}
