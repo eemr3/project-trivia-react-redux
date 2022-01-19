@@ -25,6 +25,16 @@ class FeedBack extends Component {
   handleClickRanking() {
     console.log('oi');
     return <Redirect to="/Ranking" />;
+  componentDidMount() {
+    this.setLocalStorage();
+  }
+
+  setLocalStorage = () => {
+    const { score, name, gravatarEmail } = this.props;
+    const getStorage = JSON.parse(localStorage.getItem('ranking')) || [];
+    localStorage.setItem('ranking',
+      JSON.stringify([...getStorage, { name, score, picture: gravatarEmail }]));
+
   }
 
   render() {
@@ -60,22 +70,26 @@ class FeedBack extends Component {
 const mapStateToProps = (state) => ({
   score: state.player.score,
   assertions: state.player.assertions,
-  // name: state.player.name,
-  // gravatarEmail: state.player.gravatarEmail,
+  name: state.player.name,
+  gravatarEmail: state.player.gravatarEmail,
 });
 
 FeedBack.propTypes = {
   score: PropTypes.number,
   assertions: PropTypes.number,
-  // name: PropTypes.string,
-  // gravatarEmail: PropTypes.string,
+
+  name: PropTypes.string,
+  gravatarEmail: PropTypes.string,
+
 };
 
 FeedBack.defaultProps = {
   score: 0,
   assertions: 0,
-  // name: '',
-  // gravatarEmail: '',
+
+  name: '',
+  gravatarEmail: '',
+
 };
 
 export default connect(mapStateToProps)(FeedBack);
