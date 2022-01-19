@@ -16,7 +16,7 @@ class Ranking extends Component {
           dataTestId="btn-go-home"
           handleClick={ this.shandleClickLogin }
         >
-          Volta a inicial
+          Volta ao login
         </Button>
       </div>
     );
