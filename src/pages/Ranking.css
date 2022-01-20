@@ -1,0 +1,50 @@
+.ranking-table-container {
+  margin: 0 auto;
+}
+
+.ranking-table-container th {
+  padding: 10px;
+  width: 300px;
+}
+
+.ranking-table-container thead tr th {
+  background-color: rgb(56, 53, 53);
+  color: white;
+  font-size: 1.5rem;
+  padding: 30px;
+}
+
+.ranking-table-container tbody {
+  width: 500px;
+}
+
+.ranking-table-container td {
+  padding: 10px;
+}
+
+.ranking-table-container tbody tr:nth-child( n+4 ) td {
+  background-color: rgb(221, 218, 218);
+}
+
+.ranking-table-container tbody tr:nth-child( 1 ) {
+  background-color: rgb(219, 219, 74);
+  font-family: Arial , Helvetica , sans-serif;
+  font-size: 1.4rem;
+}
+
+.ranking-table-container tbody tr:nth-child( 2 ) {
+  background-color: rgb(180, 180, 175);
+  font-family: Arial , Helvetica , sans-serif;
+  font-size: 1.3rem;
+}
+
+.ranking-table-container tbody tr:nth-child( 3 ) {
+  background-color: rgb(173, 54, 7);
+  color: white;
+  font-family: Arial , Helvetica , sans-serif;
+  font-size: 1.2rem;
+}
+
+.ranking-table-container img {
+  border-radius: 50%;
+}

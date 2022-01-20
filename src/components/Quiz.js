@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Timer from './Timer';
-import { correctAnswer, difficultyQuestion } from '../redux/actions';
+import { correctAnswer, difficultyQuestion, scoreValue } from '../redux/actions';
 
 import './Quiz.css';
 
@@ -19,6 +19,7 @@ class Quiz extends Component {
       answerCorrect: false,
       enabledButtonNext: true,
       quantityCorrectAnswer: 0,
+      totalScore: 0,
     };
   }
 
@@ -88,6 +89,23 @@ class Quiz extends Component {
     return btnShuffle;
   }
 
+  handleScore = () => {
+    const { timeValue, difficultyValue, setScore } = this.props;
+    console.log('tieme', timeValue, 'difi', difficultyValue);
+    const { answerCorrect } = this.state;
+    if (answerCorrect) {
+      const defaultValue = 10;
+      const calcScore = defaultValue + (timeValue * difficultyValue);
+      this.setState((prevState) => ({
+        totalScore: prevState.totalScore + calcScore,
+      }), () => {
+        const { totalScore } = this.state;
+        setScore(Number(totalScore));
+        localStorage.setItem('totalScore', totalScore);
+      });
+    }
+  }
+
   handleCorrectClick = () => {
     this.handleChangeStyle();
     const { setCorrectAnswer } = this.props;
@@ -100,6 +118,7 @@ class Quiz extends Component {
       const { answerCorrect } = this.state;
       const defaultValue = 1;
       setCorrectAnswer({ answerCorrect, defaultValue });
+      this.handleScore();
     });
   }
 
@@ -169,11 +188,14 @@ const mapStateToProps = (state) => ({
   finalTime: state.finalTime,
   seconds: state.timeValue,
   score: state.player.score,
+  timeValue: state.timeValue,
+  difficultyValue: state.difficulty,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   setCorrectAnswer: (object) => dispatch(correctAnswer(object)),
   setDifficulty: (difficulty) => dispatch(difficultyQuestion(difficulty)),
+  setScore: (score) => dispatch(scoreValue(score)),
 });
 
 Quiz.propTypes = {
@@ -187,6 +209,9 @@ Quiz.propTypes = {
   }),
   setCorrectAnswer: PropTypes.func,
   setDifficulty: PropTypes.func,
+  setScore: PropTypes.func,
+  timeValue: PropTypes.number,
+  difficultyValue: PropTypes.number,
 };
 
 Quiz.defaultProps = {
@@ -194,5 +219,8 @@ Quiz.defaultProps = {
   questions: {},
   setCorrectAnswer: () => {},
   setDifficulty: () => {},
+  timeValue: 0,
+  difficultyValue: 0,
+  setScore: () => {},
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Quiz);

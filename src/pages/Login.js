@@ -58,7 +58,9 @@ handleClick() {
       validateToken,
     },
   } = this;
-  setEmail({ name, gravatarEmail });
+  const score = 0;
+  const assertions = 0;
+  setEmail({ name, gravatarEmail, score, assertions });
   this.validadteTokenCode(tokenState, validCodeToken);
   if (validateToken) {
     const { setToken } = this.props;
@@ -139,7 +141,14 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   setToken: () => dispatch(thunkToken()),
 
-  setEmail: ({ name, gravatarEmail }) => dispatch(emailUser({ name, gravatarEmail })),
+  setEmail: ({
+    name,
+    gravatarEmail,
+    score, assertions }) => dispatch(emailUser({
+    name,
+    gravatarEmail,
+    score,
+    assertions })),
 });
 
 Login.propTypes = {
