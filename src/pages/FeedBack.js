@@ -9,6 +9,8 @@ import Button from '../components/Button';
   do meu filho e amigo Tiago da Silva Moreira da Turma-12
 */
 
+import './FeedBack.css';
+
 class FeedBack extends Component {
   constructor() {
     super();
@@ -52,7 +54,10 @@ class FeedBack extends Component {
         <Button
           dataTestId="btn-play-again"
           handleClick={ this.handleClickLogin }
+          className="feedback-btn-paly-again"
         >
+          <i className="fas fa-play" />
+          {' '}
           Play Again
         </Button>
 
@@ -60,7 +65,10 @@ class FeedBack extends Component {
           dataTestId="btn-ranking"
           type="button"
           handleClick={ this.handleClickRanking }
+          className="feedback-btn-ranking"
         >
+          <i className="fas fa-th-list" />
+          {' '}
           Ranking
         </Button>
       </div>

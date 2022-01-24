@@ -48,3 +48,11 @@
 .ranking-table-container img {
   border-radius: 50%;
 }
+
+.ranking-go-back {
+  cursor: pointer;
+  font-size: 1.1rem;
+  margin: 20px 0;
+  padding: 15px;
+  width: 200px;
+}

@@ -42,8 +42,11 @@ class Ranking extends Component {
         <Button
           dataTestId="btn-go-home"
           handleClick={ this.handleClickLogin }
+          className="ranking-go-back"
         >
-          Volta ao login
+          <i className="fas fa-arrow-left" />
+          {' '}
+          Go Back Login
         </Button>
         <table className="ranking-table-container">
           <thead>

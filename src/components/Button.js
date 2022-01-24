@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 
 class Button extends Component {
   render() {
-    const { children, handleClick, dataTestId } = this.props;
+    const { children, handleClick, dataTestId, className } = this.props;
     return (
       <button
         data-testid={ dataTestId }
         type="button"
         onClick={ handleClick }
+        className={ className }
       >
         {children}
       </button>
@@ -18,6 +19,7 @@ class Button extends Component {
 
 Button.propTypes = {
   dataTestId: PropTypes.string,
+  className: PropTypes.string,
   handleClick: PropTypes.func,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
@@ -28,5 +30,6 @@ Button.propTypes = {
 Button.defaultProps = {
   dataTestId: '',
   handleClick: () => {},
+  className: '',
 };
 export default Button;
