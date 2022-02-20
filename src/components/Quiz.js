@@ -89,36 +89,40 @@ class Quiz extends Component {
     return btnShuffle;
   }
 
-  handleScore = () => {
-    const { timeValue, difficultyValue, setScore } = this.props;
-    console.log('tieme', timeValue, 'difi', difficultyValue);
-    const { answerCorrect } = this.state;
-    if (answerCorrect) {
-      const defaultValue = 10;
-      const calcScore = defaultValue + (timeValue * difficultyValue);
-      this.setState((prevState) => ({
-        totalScore: prevState.totalScore + calcScore,
-      }), () => {
-        const { totalScore } = this.state;
-        setScore(Number(totalScore));
-        localStorage.setItem('totalScore', totalScore);
-      });
-    }
-  }
+  // handleScore = () => {
+  //   const { timeValue, difficultyValue, setScore } = this.props;
+  //   console.log('tieme', timeValue, 'difi', difficultyValue);
+  //   const { answerCorrect } = this.state;
+  //   if (answerCorrect) {
+  //     const defaultValue = 10;
+  //     // const calcScore = defaultValue + (timeValue * difficultyValue);
+  //     this.setState((prevState) => ({
+  //       totalScore: prevState.totalScore + defaultValue + (timeValue * difficultyValue),
+  //     }), () => {
+  //       const { totalScore } = this.state;
+  //       setScore(Number(totalScore));
+  //       localStorage.setItem('totalScore', totalScore);
+  //     });
+  //   }
+  // }
 
   handleCorrectClick = () => {
     this.handleChangeStyle();
-    const { setCorrectAnswer } = this.props;
+    const { setCorrectAnswer, setScore } = this.props;
     this.setState((prevState) => ({
       quantityCorrectAnswer: prevState.quantityCorrectAnswer + 1,
     }));
     this.setState({
       answerCorrect: true,
+      // click: true,
+      // // enabledButtonNext: false,
     }, () => {
       const { answerCorrect } = this.state;
       const defaultValue = 1;
+      const valueDefaultScore = 10;
       setCorrectAnswer({ answerCorrect, defaultValue });
-      this.handleScore();
+      setScore(valueDefaultScore);
+      // this.handleScore();
     });
   }
 

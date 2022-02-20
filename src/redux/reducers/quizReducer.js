@@ -57,7 +57,9 @@ export default (state = INITTIAL_STATE, action) => {
     };
   case SCORE_VALUE:
     return { ...state,
-      player: { ...state.player, score: action.payload },
+      player: { ...state.player,
+        score: state.player.score
+        + action.payload + (state.timeValue * state.difficulty) },
     };
   case DIFFICULTY_QUESTION:
     return {
