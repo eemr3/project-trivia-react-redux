@@ -1,5 +1,5 @@
 
-# React Trybe Wallet!
+# Project Trivia React Redux
 
 Projeto jogo de triviva, foram cinco dias de projeto em grupo! O objetivo é colocar em prática tudo o que você aprendeu sobre React e Redux ⚛️ até aqui, enquanto pratica a organização de um projeto em equipe com a metodologia agile Kanban .
 Projeto realizado para consolidar o aprendizado do sétimo bloco do módulo de front-end no curso da Trybe.
@@ -75,3 +75,4 @@ Acesse no navegador
 ## Licença
 
 [MIT](https://choosealicense.com/licenses/mit/)
+
